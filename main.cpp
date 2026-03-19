@@ -63,69 +63,83 @@ public:
 
         newNode->next = temp->next; // set the next of the newnode, to the next of the node before it
         // In other words, we're attatching the succeeding node to the newnode
-        newNode->prev = temp; // S
-        if (temp->next)
-            temp->next->prev = newNode;
+        newNode->prev = temp; // set the previous of newnode to the the temp node, because we're inserting
+        // newnode after temp, so logically temp is the preceeder of newnode.
+        if (temp->next) // If the node following temp before the insertion exists, aka if temp is not tail
+            temp->next->prev = newNode; // Set the previous of the node following temp to newnode
         else
-            tail = newNode;
-        temp->next = newNode;
+            tail = newNode; // Otherwise, newnode becomes the new tail
+        temp->next = newNode; // and set the next of temp to be newnode cus we inserted it after
     }
 
+    // delete_val() deletes the node with value value from the dll
+    // parameters: int value - the value held by the node to be deleted
+    // returns: void
     void delete_val(int value) {
-        if (!head) return;
+        if (!head) return; // If the list is empty we can't remove anything
 
-        Node* temp = head;
+        Node* temp = head; // Set a temporary node to the head for traversal
         
+        // Traverse until temp is nullptr in which we have passed the tail
+        // Or until the data held by temp matches the value we want to delete
         while (temp && temp->data != value)
             temp = temp->next;
 
+        // If the temp is null we've passed the tail and the value isn't in the dll
         if (!temp) return; 
 
+        // If the temp has a previous, aka not the head
         if (temp->prev)
-            temp->prev->next = temp->next;
+            temp->prev->next = temp->next; // Set the next of the preceeding node to the next
+            // of the current node, basically bypassing
         else
-            head = temp->next; 
+            head = temp->next;  // Otherwise the new head becomes the succeeding node
 
+        // If the temp has a next, aka not the tail
         if (temp->next)
-            temp->next->prev = temp->prev;
+            temp->next->prev = temp->prev; // Set the prev of the succeeding node to the prev
+            // of the current node, basically bypassing
         else
-            tail = temp->prev; 
+            tail = temp->prev;  // Otherwise the new tail becomes the preceeding node
 
-        delete temp;
+        delete temp; // delete temp so no memory leaks
     }
 
+    // delete_pos() deletes the node in position n
+    // parameters: int pos - position of the node to be deleted
+    // returns void
     void delete_pos(int pos) {
-        if (!head) {
+        if (!head) { // If the head is nullptr then the list is empty and we can't delete anythig
             cout << "List is empty." << endl;
             return;
         }
     
-        if (pos == 1) {
-            pop_front();
+        if (pos == 1) { // If position is 1 we're deleting the head node
+            pop_front(); // so we just pop the front of the list
             return;
         }
     
-        Node* temp = head;
+        Node* temp = head; // Sets a temp node to head for traversal
     
-        for (int i = 1; i < pos; i++){
-            if (!temp) {
+        for (int i = 1; i < pos; i++){ // Traverse the dll starting from 1 to pos
+            if (!temp) { // If temp is nullptr means we've passed the tail and position is out of bounds
                 cout << "Position doesn't exist." << endl;
                 return;
             }
             else
-                temp = temp->next;
+                temp = temp->next; // otherwise set temp to the node suceeding temp
         }
-        if (!temp) {
+        if (!temp) { // If temp is nullptr means we've passed thet ail and the position is out of bounds
             cout << "Position doesn't exist." << endl;
             return;
         }
     
-        if (!temp->next) {
-            pop_back();
+        if (!temp->next) { // If temp has no succeesor, we're deleting the tail node
+            pop_back(); // so we just pop the back of the list
             return;
         }
     
-        Node* tempPrev = temp->prev;
+        Node* tempPrev = temp->prev; // tempprev
         tempPrev->next = temp->next;
         temp->next->prev = tempPrev;
         delete temp;
