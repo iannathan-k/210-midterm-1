@@ -11,7 +11,9 @@ private:
         Node* next; // This pointer points to the next node in the dll
         // This is a full parameter constructor for node, which can takes the data value
         // pointer to the previous node, and pointer to the next node. However,
-        // The p and n can also be left blank, as they are by de    afult set to nullptr.
+        // The p and n can also be left blank, as they are by deafult set to nullptr.
+        // This is essential because linked lists are only held sequentially together by pointers,
+        // So without the previuous and next nodes, its imposible to traverse the linked list.
         Node(int val, Node* p = nullptr, Node* n = nullptr) {
             data = val; 
             prev = p;
@@ -33,7 +35,7 @@ public:
     //             int position - the position of the node to be inserted after
     // returns: void
     void insert_after(int value, int position) {
-        // Ofc you can't insert a node in a negative position\
+        // Ofc you can't insert a node in a negative position
         // So this is a guard clause
         if (position < 0) {
             cout << "Position must be >= 0." << endl;
@@ -302,11 +304,11 @@ int main() {
     srand(time(0)); // seed the random number generator
     cout << MIN_NR + MIN_LS + MAX_NR + MAX_LS;  // dummy statement to avoid compiler warning
 
-    DoublyLinkedList* dll = new DoublyLinkedList();
+    DoublyLinkedList* dll = new DoublyLinkedList(); // create the dll
 
-    for (int i = 0; i < 20; i++) {
-        int num = rand() % (MAX_NR - MIN_NR + 1) + MIN_NR;
-        dll->push_back(num);
+    for (int i = 0; i < 20; i++) { // add 20 nodes to the dll
+        int num = rand() % (MAX_NR - MIN_NR + 1) + MIN_NR; // random numbers between 10 and 99
+        dll->push_back(num); // push it to the list
     }
 
     cout << "Complete Print" << endl;
