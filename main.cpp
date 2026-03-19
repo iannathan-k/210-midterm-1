@@ -139,54 +139,81 @@ public:
             return;
         }
     
-        Node* tempPrev = temp->prev; // tempprev
-        tempPrev->next = temp->next;
-        temp->next->prev = tempPrev;
-        delete temp;
+        // fixing the pointers now
+        Node* tempPrev = temp->prev; // temporary previous node to represent the preceeding node
+        tempPrev->next = temp->next; // set the sucessor node of the previous to the successor of the node to be deleted
+        temp->next->prev = tempPrev; // set the preceeding node of the next node to be the previous node of the node to be deleted
+        // essentially relinking the pointers to bypass the node to be deleted
+        delete temp; // delete temp for memory
+        // But I think your forgetting to also delete tempPrev!
     }
-
+    
+    // push_back() pushes a new node with value v to the back of the dll
+    // parameters: int v - value for the new node to hold
+    // returns: void
     void push_back(int v) {
+        // Make the new node to be pushed, with data value v
+        // next and prev are nullptr by default
         Node* newNode = new Node(v);
-        if (!tail)
-            head = tail = newNode;
+        if (!tail) // If the list is empty because the tail is null
+            head = tail = newNode; // set the head and tail to the newnode
         else {
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;
+            tail->next = newNode; // otherwise set the successor of the current tail to be newnode
+            // Basically making it link to newnode
+            newNode->prev = tail; // Set the previous of newnode to be the tail, making it link
+            // to the old node
+            tail = newNode; // set the tail to be newnode
         }
     }
     
+    // push_front() pushes a new node with value v to the front of the dll
+    // parameters: int v - value for the new node to hold
+    // returns: void
     void push_front(int v) {
+        // Make the new node to be pushed, with data value v
+        // next and prev are nullptr by default
         Node* newNode = new Node(v);
-        if (!head)
-            head = tail = newNode;
+        if (!head) // If the list is empty because the head is null
+            head = tail = newNode; // Set the head and tail to the newnode
         else {
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
+            newNode->next = head; // otherwise set the sucessort of the new node to be the head
+            // Basically making it link to the old node
+            head->prev = newNode; // Set the previous of the head node to be the newnode
+            // Basically making it link to the newnode
+            head = newNode; // set the new head to be newnode
         }
     }
     
+    // pop_front() removes the head node from the dll
+    // parameters: none
+    // returns: void
     void pop_front() {
 
-        if (!head) {
+        if (!head) { // If the list is empty because the head is null
+            // You can't remove anything from an empty list
             cout << "List is empty." << endl;
             return;
         }
 
-        Node * temp = head;
-
+        Node * temp = head; // Set a temporary node so you can delete it later
+        
+        // if the node has a next, aka the list is longer than 1
         if (head->next) {
-            head = head->next;
-            head->prev = nullptr;
+            head = head->next; // set the head to the successor of the old head
+            head->prev = nullptr; // set the previous of the new head to be null, cus a head
+            // doesn't have a previous
         }
         else
-            head = tail = nullptr;
-        delete temp;
+            head = tail = nullptr; // otherwise the list is now empty so set both head and tail
+            // to null
+        delete temp; // Free up the memory
     }
 
+    // pop_back() removes the tail node form the dll
+    // parameters: none
+    // returns: none
     void pop_back() {
-        if (!tail) {
+        if (!tail) { // If tail is nullptr, the liust is empty
             cout << "List is empty." << endl;
             return;
         }
