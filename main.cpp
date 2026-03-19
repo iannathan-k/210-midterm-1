@@ -7,11 +7,11 @@ class DoublyLinkedList {
 private:
     struct Node {
         int data; // This integer holds the actual data of the node
-        Node* prev; // This pointer points to the next node in the dll
-        Node* next; // This pointer points to the previous node in the dll
+        Node* prev; // This pointer points to the previous node in the dll
+        Node* next; // This pointer points to the next node in the dll
         // This is a full parameter constructor for node, which can takes the data value
         // pointer to the previous node, and pointer to the next node. However,
-        // The p and n can also be left blank, as they are by deafult set to nullptr.
+        // The p and n can also be left blank, as they are by de    afult set to nullptr.
         Node(int val, Node* p = nullptr, Node* n = nullptr) {
             data = val; 
             prev = p;
@@ -53,7 +53,8 @@ public:
         // a. We reach the position n, which means temp will hold the node before where we want to insert
         // b. temp points to null, meaning we've passed the tail
         for (int i = 0; i < position && temp; ++i)
-            temp = temp->next; // Go to next node
+            temp = temp->next; // traverse to the next node
+            // Essentially just setting temporary to the node which is current pointed to as next
 
         if (!temp) { // If the temp is null, that means we've passed the tail node and so the position is invalid
             cout << "Position exceeds list size. Node not inserted.\n";
@@ -145,7 +146,6 @@ public:
         temp->next->prev = tempPrev; // set the preceeding node of the next node to be the previous node of the node to be deleted
         // essentially relinking the pointers to bypass the node to be deleted
         delete temp; // delete temp for memory
-        // But I think your forgetting to also delete tempPrev!
     }
     
     // push_back() pushes a new node with value v to the back of the dll
@@ -276,7 +276,7 @@ public:
         cout << endl;
     }
 
-    // every_other_element() prints out the data held by every other node from back to front,
+    // every_other_element() prints out the data held by every other node from front to back,
     // starting from the first node.
     // parameters: none
     // returns: void
@@ -288,20 +288,33 @@ public:
         }
         while (current) { // for each node in the list, aka until curernt is null
             cout << current->data << " "; // print the data held by the current node
-            current = current->next->next; // traverse to the next next node through the next pointer
+            if (!current->next) return; // If there isn't a next node then we've reached the end
+            // And we can't do next next because you would be accessing the next pointer of a nullptr
+            // which causes an error, so you must first check that there is a next node to access
+            // the nextpointer ofs
+            current = current->next->next; // otherwise set to the next next node
         }
+        cout << endl;
     }
 };
 
 int main() {
+    srand(time(0)); // seed the random number generator
     cout << MIN_NR + MIN_LS + MAX_NR + MAX_LS;  // dummy statement to avoid compiler warning
 
     DoublyLinkedList* dll = new DoublyLinkedList();
 
-    for (int i = 0; i < 10; i++) {
-        int num = rand() % (MAX_NR - MIN_NR + 1)
-        dll->push_back()
+    for (int i = 0; i < 20; i++) {
+        int num = rand() % (MAX_NR - MIN_NR + 1) + MIN_NR;
+        dll->push_back(num);
     }
-    
+
+    cout << "Complete Print" << endl;
+    dll->print();
+    cout << "Backwards Complete Print" << endl;
+    dll->print_reverse();
+    cout << "Every Other Element Print" << endl;
+    dll->every_other_element();
+
     return 0;
 }
