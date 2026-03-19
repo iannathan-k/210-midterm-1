@@ -213,58 +213,95 @@ public:
     // parameters: none
     // returns: none
     void pop_back() {
-        if (!tail) { // If tail is nullptr, the liust is empty
+        if (!tail) { // If tail is nullptr, the list is empty
+            // You can't delete from an empty list
             cout << "List is empty." << endl;
             return;
         }
-        Node * temp = tail;
+        Node * temp = tail; // set a temp node to tail so we can delete it later
 
-        if (tail->prev) {
-            tail = tail->prev;
-            tail->next = nullptr;
+        if (tail->prev) { // If the tail has a previous, aka the list is longer than 1
+            tail = tail->prev; // set the tail to the previous of the old head
+            tail->next = nullptr; // set the next of the new tail to be null, because 
+            // the tail doesn't have a next
         }
         else
-            head = tail = nullptr;
-        delete temp;
+            head = tail = nullptr; // otherwise the list is now empty so set both head and tail
+            // to null
+        delete temp; // free up the memory
     }
 
+    // ~DoublyLinkedList() deconstructs the dll and frees the memory
+    // parameters: none
+    // returns: void
     ~DoublyLinkedList() {
-        while (head) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
+        while (head) { // for each node in the list, aka until head is null
+            Node* temp = head; // Set temprorary to the current head
+            // This works because we're deleting the head each time and reassigning
+            // the head to the next element so we're essentially constantly doing pop_front
+            head = head->next; // set the head to the next head
+            delete temp; // delete the temporary
         }
     }
+
+    // print() prints out the data held by each node in the dll from front to back
+    // parameters: none
+    // returns: void
     void print() {
-        Node* current = head;
-        if (!current) {
+        Node* current = head; // set the current node to the head node for traversal forwards
+        if (!current) { // if the current node is null the list is empty
             cout << "List is empty." << endl;
             return;
         }
-        while (current) {
-            cout << current->data << " ";
-            current = current->next;
+        while (current) { // for each node in the list, aka until curernt is null
+            cout << current->data << " "; // print the data held by the current node
+            current = current->next; // traverse to the next node through the next pointer
         }
         cout << endl;
     }
 
+    // print_reverse() prints out the data held by each node in the dll from back to front
+    // parameters: none
+    // returns: void
     void print_reverse() {
-        Node* current = tail;
-        if (!current) { 
+        Node* current = tail; // set the current node to the tail node for traversal backwards
+        if (!current) { // if the current node is null then the list is empty
             cout << "List is empty." << endl;
             return;
         }
-        while (current) {
-            cout << current->data << " ";
-            current = current->prev;
+        while (current) { // for each node in the list, aka until current is null
+            cout << current->data << " "; // print the data held by the current node
+            current = current->prev; // traverse to the previous node through the prev pointer
         }
         cout << endl;
+    }
+
+    // every_other_element() prints out the data held by every other node from back to front,
+    // starting from the first node.
+    // parameters: none
+    // returns: void
+    void every_other_element() {
+        Node* current = head; // set the current node to the head node for traversal forwards
+        if (!current) { // if the current node is null the list is empty
+            cout << "List is empty." << endl;
+            return;
+        }
+        while (current) { // for each node in the list, aka until curernt is null
+            cout << current->data << " "; // print the data held by the current node
+            current = current->next->next; // traverse to the next next node through the next pointer
+        }
     }
 };
 
 int main() {
     cout << MIN_NR + MIN_LS + MAX_NR + MAX_LS;  // dummy statement to avoid compiler warning
 
+    DoublyLinkedList* dll = new DoublyLinkedList();
+
+    for (int i = 0; i < 10; i++) {
+        int num = rand() % (MAX_NR - MIN_NR + 1)
+        dll->push_back()
+    }
     
     return 0;
 }
